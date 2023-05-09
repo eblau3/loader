@@ -1,31 +1,18 @@
 const loader = (element) => {
-  const fixScroll = () => {
-    const target = document.querySelector('body');
-    const scrollPos = window.scrollY;
-    target.style.position = 'fixed';
-    target.style.top = `-${scrollPos}px`;
-    target.style.left = '0';
-  };
+  setTimeout(() => element.classList.add('is-active'));
+
+  let loaded = 0;
+  window.addEventListener('load', () => loaded = 1);
   
-  const cancelFixScroll = () => {
-    const target = document.querySelector('body');
-    const fixedPos = Number(target.style.top.replace(/px|-/g, ''));
-    target.style.position = 'static';
-    window.scrollTo(0, fixedPos);
-  };
-
   setTimeout(() => {
-    fixScroll();
-    element.classList.add('is-active');
-  });
-
-  window.addEventListener('load', () => {
-    setTimeout(() => {
-      element.classList.remove('is-active');
-      element.classList.add('is-remove');
-      cancelFixScroll();
-    }, 3000);
-  });
+    let intervalId = setInterval(() => {
+      if(loaded === 1) {
+        element.classList.remove('is-active');
+        element.classList.add('is-remove');
+        clearInterval(intervalId);
+      };
+    }, 100);
+  }, 2600);
 };
 
 window.addEventListener('DOMContentLoaded', () => {
